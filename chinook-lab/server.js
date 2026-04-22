@@ -49,5 +49,21 @@ app.get('/genres/:id/stats', (req, res) => {
     const stmt = db.prepare(
         "SELECT COUNT(*), AVG(track.milliseconds), genre.name FROM track INNER JOIN genre ON track.genreID = genre.genreID WHERE track.genreID = ?"
     );
-    res.json(stmt.all(parseInt(req.params.id)));
+    res.json(stmt.all(req.params.id));
 })
+
+// C.5
+app.get('/playlists', (req, res) => {
+    const stmt = db.prepare(
+        "SELECT * FROM playlist"
+    );
+    res.json(stmt.all());
+})
+
+app.post('/playlists', (req, res) => {
+    const insert = db.prepare("INSERT INTO playlist (Name) VALUES (?)");
+    const result = insert.run(req.body.name);
+    result.lastInsertRowid; // 276
+    result.changes; // 1 
+    res.type('text').send(result.lastInsertRowid);
+});
