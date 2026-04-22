@@ -18,11 +18,26 @@ app.get('/tables', (req, res) => {
     res.json(stmt.all());
 });
 
-// Part C
+/** Part C */ 
 
+// C.1
 app.get('/artists', (req, res) => {
     const stmt = db.prepare(
         "SELECT * FROM artist"
     );
+    res.json(stmt.all());
+});
+
+app.get('/artists/:id/albums', (req, res) => {
+    const stmt = db.prepare(
+        "SELECT * FROM album WHERE artistID=?"
+    );
+    res.json(stmt.all(req.params.id));
+});
+
+app.get('/tracks/long', (req, res) => {
+    const stmt = db.prepare(
+        "SELECT * FROM track INNER JOIN album ON track.albumID = album.albumID WHERE track.milliseconds > 300000 "
+    )
     res.json(stmt.all());
 });
