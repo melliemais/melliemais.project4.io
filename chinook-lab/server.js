@@ -79,4 +79,19 @@ app.delete('/playlists/:id', (req, res) => {
     }else {
         res.type('text').send("Playlist with the ID was not found.");
     }
+});
+
+// D.1
+
+app.get('/invoices/top-customers', (req, res) => {
+    const stmt = db.prepare(`
+        SELECT *, SUM(Invoice.Total)
+        FROM customer 
+        INNER JOIN invoice ON customer.customerID = invoice.customerID 
+        GROUP BY invoice.customerID 
+        ORDER BY SUM(Invoice.Total) DESC 
+        LIMIT 5 `
+    );
+
+    res.json(stmt.all());
 })
