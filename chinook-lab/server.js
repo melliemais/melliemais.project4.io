@@ -28,6 +28,7 @@ app.get('/artists', (req, res) => {
     res.json(stmt.all());
 });
 
+// C.2
 app.get('/artists/:id/albums', (req, res) => {
     const stmt = db.prepare(
         "SELECT * FROM album WHERE artistID=?"
@@ -35,9 +36,10 @@ app.get('/artists/:id/albums', (req, res) => {
     res.json(stmt.all(req.params.id));
 });
 
+// C.3
 app.get('/tracks/long', (req, res) => {
     const stmt = db.prepare(
         "SELECT * FROM track INNER JOIN album ON track.albumID = album.albumID WHERE track.milliseconds > 300000 "
-    )
+    );
     res.json(stmt.all());
 });
