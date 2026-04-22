@@ -63,7 +63,20 @@ app.get('/playlists', (req, res) => {
 app.post('/playlists', (req, res) => {
     const insert = db.prepare("INSERT INTO playlist (Name) VALUES (?)");
     const result = insert.run(req.body.name);
-    result.lastInsertRowid; // 276
-    result.changes; // 1 
+
     res.type('text').send(result.lastInsertRowid);
 });
+
+// C.6
+
+app.delete('/playlists/:id', (req, res) => {
+    const del = db.prepare("DELETE FROM playlist WHERE playlist.playlistID = ?");
+
+    const result = del.run(req.params.id);
+
+    if (result.changes > 0){
+        res.type('text').send("Playlist with the ID " + req.params.id + "was successfully deleted.");
+    }else {
+        res.type('text').send("Playlist with the ID was not found.");
+    }
+})
