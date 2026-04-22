@@ -43,3 +43,11 @@ app.get('/tracks/long', (req, res) => {
     );
     res.json(stmt.all());
 });
+
+// C.4
+app.get('/genres/:id/stats', (req, res) => {
+    const stmt = db.prepare(
+        "SELECT COUNT(*), AVG(track.milliseconds), genre.name FROM track INNER JOIN genre ON track.genreID = genre.genreID WHERE track.genreID = ?"
+    );
+    res.json(stmt.all(parseInt(req.params.id)));
+})
